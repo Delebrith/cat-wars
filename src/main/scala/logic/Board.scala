@@ -82,7 +82,7 @@ case class Board(fields: Array[Array[Field]]) {
       else {
         
         val surroundings = (f: Field) => for {
-            x <- (f.location.x - 1 to f.location.y + 1)
+            x <- (f.location.x - 1 to f.location.x + 1)
             y <- (f.location.y - 1 to f.location.y + 1) 
               if ((x != f.location.x || y != f.location.y) &&
                   (allowThroughCorners || x == f.location.x || y == f.location.y) &&
