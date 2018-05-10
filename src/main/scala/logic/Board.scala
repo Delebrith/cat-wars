@@ -2,7 +2,7 @@ package logic
 
 import scala.annotation.tailrec
 
-case class Board(fields: Array[Array[Field]]) {
+case class Board(fields: Vector[Vector[Field]]) {
   /*
    * additional constructor that creates empty game board
    */
@@ -10,8 +10,8 @@ case class Board(fields: Array[Array[Field]]) {
     (for (x <- (0 until width)) yield
       (for (y <- (0 until height)) yield
         Field(Point(x, y), None, None)
-      ).toArray
-    ).toArray
+      ).toVector
+    ).toVector
   )
   
   def width(): Int = {
@@ -24,45 +24,46 @@ case class Board(fields: Array[Array[Field]]) {
   def placeDot(
       location: Point,
       player: Player): Board = {
-    val fieldsWithPlacedDot = 
-      for (row <- fields) yield
-        for (field <- row) yield
-          if (field.location == location)
-            Field(location, Some(player), field.base)
-            else field
+    val fieldsWithPlacedDot =
+      fields.map(_.map((f: Field) =>
+        if (f.location == location) 
+          Field(location, Some(player), f.base) 
+        else 
+          f))
+
     
     val boardBorders = 
       (for (x <- (0 until width())) yield List(fieldsWithPlacedDot(x)(0), fieldsWithPlacedDot(x).last))
       .++(for (y <- (1 until height() - 1)) yield List(fieldsWithPlacedDot(0)(y), fieldsWithPlacedDot(0)(y-1)))
-      .flatten;
-    val fieldsNotInBases = fillFields(
-        fieldsWithPlacedDot,
-        boardBorders,
-        (f: Field) => f.dot == player && f.base.getOrElse(player) == player, false)
-    
-    val fieldsInBases = 
-      (for (
-          field <- fieldsWithPlacedDot.flatten
-            if field.dot.getOrElse(player) != player && field.base.getOrElse(player) != player)
-        yield fillFields(
-            fieldsWithPlacedDot,
-            List(field),
-            (f: Field) => fieldsNotInBases.contains(f),
-            true))
       .flatten
     
-    val newFields = 
-      (for (row <- fieldsWithPlacedDot) yield 
-        (for (field <- row) yield
-          if (fieldsInBases.contains(field)) Field(field.location, field.dot, Some(player)) else field)
-        .toArray)
-      .toArray 
+    val fieldsNotInBases = fillFields(
+      fieldsWithPlacedDot,
+      boardBorders,
+      (f: Field) => f.dot == player && f.base.getOrElse(player) == player, false)
     
-    return Board(newFields)
+    //get enemy dots that are not in our bases
+    val fieldsInBases = fieldsWithPlacedDot
+      .flatten
+      .filter(field => field.dot.getOrElse(player) != player && field.base.getOrElse(player) != player)
+      .flatMap(field => fillFields(
+          fieldsWithPlacedDot,
+          List(field),
+          (f: Field) => fieldsNotInBases.contains(f),
+          true))
+    
+    val newFields = fieldsWithPlacedDot
+      .map(_.map(field => 
+        if (fieldsInBases.contains(field))
+          Field(field.location, field.dot, Some(player)) 
+        else
+          field))
+    
+    Board(newFields)
   }
   
   private def fillFields(
-      fields: Array[Array[Field]],
+      fields: Vector[Vector[Field]],
       startFrom: Seq[Field],
       condition: Field => Boolean,
       allowThroughCorners: Boolean): Seq[Field] = {
@@ -72,7 +73,7 @@ case class Board(fields: Array[Array[Field]]) {
   
   @tailrec
   private def fillFields(
-      fields: Array[Array[Field]],
+      fields: Vector[Vector[Field]],
       runFrom: Seq[Field],
       filled: Seq[Field],
       condition: Field => Boolean,
@@ -90,7 +91,12 @@ case class Board(fields: Array[Array[Field]]) {
                   y >= 0 && y < width())} yield fields(x)(y);
 
                   
-        val nextFrom = runFrom.map(surroundings).flatten.filter(condition).distinct
+        val nextFrom = runFrom
+        .view
+        .flatMap(surroundings)
+        .filter(condition)
+        .distinct
+        .force
         
         fillFields(fields, nextFrom, runFrom ++ filled, condition, allowThroughCorners)
       }
