@@ -24,42 +24,41 @@ case class Board(fields: Vector[Vector[Field]]) {
   def placeDot(
       location: Point,
       player: Player): Board = {
-    val fieldsWithPlacedDot =
+    val newFields =
       fields.map(_.map((f: Field) =>
         if (f.location == location) 
           Field(location, Some(player), f.base) 
         else 
           f))
 
-    
     val boardBorders = 
-      (for (x <- (0 until width())) yield List(fieldsWithPlacedDot(x)(0), fieldsWithPlacedDot(x).last))
-      .++(for (y <- (1 until height() - 1)) yield List(fieldsWithPlacedDot(0)(y), fieldsWithPlacedDot(0)(y-1)))
+      (for (x <- (0 until width())) yield List(newFields(x)(0), newFields(x).last))
+      .++(for (y <- (1 until height() - 1)) yield List(newFields(0)(y), newFields.last(y)))
       .flatten
     
     val fieldsNotInBases = fillFields(
-      fieldsWithPlacedDot,
+      newFields,
       boardBorders,
       (f: Field) => f.dot == player && f.base.getOrElse(player) == player, false)
     
     //get enemy dots that are not in our bases
-    val fieldsInBases = fieldsWithPlacedDot
+    val fieldsInBases = newFields
       .flatten
       .filter(field => field.dot.getOrElse(player) != player && field.base.getOrElse(player) != player)
       .flatMap(field => fillFields(
-          fieldsWithPlacedDot,
+          newFields,
           List(field),
           (f: Field) => fieldsNotInBases.contains(f),
           true))
     
-    val newFields = fieldsWithPlacedDot
-      .map(_.map(field => 
-        if (fieldsInBases.contains(field))
-          Field(field.location, field.dot, Some(player)) 
-        else
-          field))
-    
-    Board(newFields)
+    Board(
+      newFields
+        .map(_.map(field => 
+          if (fieldsInBases.contains(field))
+            Field(field.location, field.dot, Some(player)) 
+          else
+            field))
+      )
   }
   
   private def fillFields(
