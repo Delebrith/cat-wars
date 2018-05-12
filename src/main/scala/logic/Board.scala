@@ -39,16 +39,16 @@ case class Board(fields: Vector[Vector[Field]]) {
     val fieldsNotInBases = fillFields(
       newFields,
       boardBorders,
-      (f: Field) => f.dot == player && f.base.getOrElse(player) == player, false)
+      (f: Field) => !(f.dot == Some(player) && f.base == None || f.base == Some(player)), false)
     
     //get enemy dots that are not in our bases
     val fieldsInBases = newFields
       .flatten
-      .filter(field => field.dot.getOrElse(player) != player && field.base.getOrElse(player) != player)
+      .filter(field => field.dot.getOrElse(player) != player && field.base != Some(player))
       .flatMap(field => fillFields(
           newFields,
           List(field),
-          (f: Field) => fieldsNotInBases.contains(f),
+          (f: Field) => !fieldsNotInBases.contains(f),
           true))
     
     Board(
@@ -67,7 +67,7 @@ case class Board(fields: Vector[Vector[Field]]) {
       condition: Field => Boolean,
       allowThroughCorners: Boolean): Seq[Field] = {
     val filteredStartFrom = startFrom.filter(condition)
-    fillFields(fields, startFrom, Seq[Field](), condition, allowThroughCorners)
+    fillFields(fields, filteredStartFrom, Seq[Field](), condition, allowThroughCorners)
   }
   
   @tailrec
@@ -78,7 +78,7 @@ case class Board(fields: Vector[Vector[Field]]) {
       condition: Field => Boolean,
       allowThroughCorners: Boolean): Seq[Field] = {
       if (runFrom.length == 0) 
-        runFrom
+        filled
       else {
         
         val surroundings = (f: Field) => for {
@@ -93,6 +93,8 @@ case class Board(fields: Vector[Vector[Field]]) {
         val nextFrom = runFrom
         .view
         .flatMap(surroundings)
+        .filter(f => !filled.contains(f))
+        .filter(f => !runFrom.contains(f))
         .filter(condition)
         .distinct
         .force
