@@ -95,4 +95,58 @@ class LogicTest extends FlatSpec {
         assert(field.base == None)
     }
   }
+  
+  "Placing dot on an already existing one" should "throw an exception" in {
+    val player = Player("")
+    val board = Board(Vector(Vector(Field(Point(0, 0), Some(player), None))))
+    
+    assertThrows[GameLogicException] {
+      board.placeDot(Point(0, 0), player)
+    }
+  }
+  
+  
+  
+  "Placing dot in a base" should "throw an exception" in {
+    val player = Player("")
+    
+    /*
+     * Board:
+     * 1 1 1
+     * 1 - 1
+     * 1 1 1
+     * With bases:
+     * 1 1 1
+     * 1 1 1
+     * 1 1 1
+     */
+    
+    val board = Board(Vector(
+        Vector(Field(Point(0, 0), Some(player), Some(player)), Field(Point(1, 0), Some(player), Some(player)), Field(Point(2, 0), Some(player), Some(player))),
+        Vector(Field(Point(0, 1), Some(player), Some(player)), Field(Point(1, 1), None, Some(player)), Field(Point(2, 1), Some(player), Some(player))),
+        Vector(Field(Point(0, 2), Some(player), Some(player)), Field(Point(1, 2), Some(player), Some(player)), Field(Point(2, 2), Some(player), Some(player)))
+      ))
+
+    assertThrows[GameLogicException] {
+      board.placeDot(Point(1, 1), player)
+    }
+  }
+  
+  "Placing dot outside of the board " should "throw an exception" in {
+    val board = new Board(3, 4)
+    val player = Player("")
+    
+    assertThrows[GameLogicException] {
+      board.placeDot(Point(-1, 1), player)
+    }
+    assertThrows[GameLogicException] {
+      board.placeDot(Point(1, -1), player)
+    }
+    assertThrows[GameLogicException] {
+      board.placeDot(Point(6, 1), player)
+    }
+    assertThrows[GameLogicException] {
+      board.placeDot(Point(1, 5), player)
+    }
+  }
 }

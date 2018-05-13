@@ -24,10 +24,14 @@ case class Board(fields: Vector[Vector[Field]]) {
   def placeDot(
       location: Point,
       player: Player): Board = {
+    
+    if (location.x < 0 || location.y < 0 || location.x >= width() || location.y >= height())
+      throw GameLogicException("Location is out of board")
+    
     val newFields =
       fields.map(_.map((f: Field) =>
         if (f.location == location) 
-          Field(location, Some(player), f.base) 
+          f.placeDot(player) 
         else 
           f))
 
