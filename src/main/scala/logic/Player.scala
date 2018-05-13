@@ -1,3 +1,3 @@
 package logic
 
-case class Player();
+case class Player(name: String);
