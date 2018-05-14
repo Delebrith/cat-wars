@@ -113,7 +113,7 @@ class LogicTest extends FlatSpec {
     /*
      * Board:
      * 1 1 1
-     * 1 - 1
+     * 1 . 1
      * 1 1 1
      * With bases:
      * 1 1 1
@@ -122,9 +122,9 @@ class LogicTest extends FlatSpec {
      */
     
     val board = Board(Vector(
-        Vector(Field(Point(0, 0), Some(player), Some(player)), Field(Point(1, 0), Some(player), Some(player)), Field(Point(2, 0), Some(player), Some(player))),
-        Vector(Field(Point(0, 1), Some(player), Some(player)), Field(Point(1, 1), None, Some(player)), Field(Point(2, 1), Some(player), Some(player))),
-        Vector(Field(Point(0, 2), Some(player), Some(player)), Field(Point(1, 2), Some(player), Some(player)), Field(Point(2, 2), Some(player), Some(player)))
+        Vector(Field(Point(0, 0), Some(player), Some(player)), Field(Point(0, 1), Some(player), Some(player)), Field(Point(0, 2), Some(player), Some(player))),
+        Vector(Field(Point(1, 0), Some(player), Some(player)), Field(Point(1, 1), None, Some(player)), Field(Point(1, 2), Some(player), Some(player))),
+        Vector(Field(Point(2, 0), Some(player), Some(player)), Field(Point(2, 1), Some(player), Some(player)), Field(Point(2, 2), Some(player), Some(player)))
       ))
 
     assertThrows[GameLogicException] {
@@ -148,5 +148,47 @@ class LogicTest extends FlatSpec {
     assertThrows[GameLogicException] {
       board.placeDot(Point(1, 5), player)
     }
+  }
+  
+  "List of connections of empty board" should "be empty" in {
+    val board = new Board(2, 5)
+    
+    assert(board.connections.isEmpty)
+  }
+  
+  "List of connections of board with base" should "be the border of the base" in {
+    /*
+     * Board:
+     * 1 1 1 2
+     * 1 2 1 2
+     * 2 1 1 .
+     * 2 1 2 2
+     * with bases:
+     * 1 1 . .
+     * 1 1 1 .
+     * . 1 1 .
+     * .  . .
+     * 
+     */
+    
+    val p1 = Player("1")
+    val p2 = Player("2")
+    
+    val board = Board(Vector(
+        Vector(Field(Point(0, 0), Some(p1), Some(p1)), Field(Point(0, 1), Some(p1), Some(p1)), Field(Point(0, 2), Some(p1), None), Field(Point(0, 3), Some(p2), None)),
+        Vector(Field(Point(1, 0), Some(p1), Some(p1)), Field(Point(1, 1), Some(p2), Some(p1)), Field(Point(1, 2), Some(p1), Some(p1)), Field(Point(1, 3), Some(p2), None)),
+        Vector(Field(Point(2, 0), Some(p2), None), Field(Point(2, 1), Some(p1), Some(p1)), Field(Point(2, 2), Some(p1), Some(p1)), Field(Point(2, 3), None, None)),
+        Vector(Field(Point(3, 0), Some(p2), None), Field(Point(3, 1), Some(p1), None), Field(Point(3, 2), Some(p2), None), Field(Point(3, 3), Some(p2), None))
+      ))
+          
+    val expectedConnections = Seq((Point(0, 0), Point(0, 1)), (Point(0, 1), Point(1, 2)), (Point(1, 2), Point(2, 2)),
+        (Point(2, 2), Point(2, 1)), (Point(2, 1), Point(1, 0)), (Point(1, 0), Point(0, 0)))
+    
+    val connections = board.connections()
+ 
+    for (conn <- connections)
+      assert(expectedConnections.contains(conn) || expectedConnections.contains(conn.swap))
+    for (conn <- expectedConnections)
+      assert(connections.contains(conn) || connections.contains(conn.swap))
   }
 }
