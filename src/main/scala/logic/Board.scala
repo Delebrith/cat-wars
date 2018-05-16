@@ -7,18 +7,18 @@ case class Board(fields: Vector[Vector[Field]]) {
    * additional constructor that creates empty game board
    */
   def this(width: Int, height: Int) = this (
-    (for (x <- (0 until width)) yield
-      (for (y <- (0 until height)) yield
+    (for (y <- (0 until height)) yield
+      (for (x <- (0 until width)) yield
         Field(Point(x, y), None, None)
       ).toVector
     ).toVector
   )
   
   def width(): Int = {
-    fields.length;
+    if (fields.length > 0) fields(0).length else 0;
   }
   def height(): Int = {
-    if (fields.length > 0) fields(0).length else 0;
+    fields.length;
   }
   
   def placeDot(
@@ -32,8 +32,8 @@ case class Board(fields: Vector[Vector[Field]]) {
           f))
 
     val boardBorders = 
-      (for (x <- (0 until width())) yield List(newFields(x)(0), newFields(x).last))
-      .++(for (y <- (1 until height() - 1)) yield List(newFields(0)(y), newFields.last(y)))
+      (for (x <- (0 until width())) yield List(newFields(0)(x), newFields.last(x)))
+      .++(for (y <- (1 until height() - 1)) yield List(newFields(y)(0), newFields(y).last))
       .flatten
     
     val fieldsNotInBases = fillFields(
@@ -87,7 +87,7 @@ case class Board(fields: Vector[Vector[Field]]) {
               if ((x != f.location.x || y != f.location.y) &&
                   (allowThroughCorners || x == f.location.x || y == f.location.y) &&
                   x >= 0 && x < width() &&
-                  y >= 0 && y < width())} yield fields(x)(y);
+                  y >= 0 && y < width())} yield fields(y)(x);
 
                   
         val nextFrom = runFrom
