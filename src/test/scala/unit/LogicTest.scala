@@ -13,7 +13,7 @@ class LogicTest extends FlatSpec {
     
     for (x <- (0 until 4))
       for (y <- (0 until 3))
-        assert(board.fields(x)(y) == Field(Point(x, y), None, None))
+        assert(board.fields(y)(x) == Field(Point(x, y), None, None))
   }
   
   "Board after adding a dot" should "contain the dot only in selected field" in {
@@ -26,9 +26,9 @@ class LogicTest extends FlatSpec {
     for (x <- (0 until 5))
       for (y <- (0 until 5)) {
         if (x == location.x && y == location.y)
-          assert(newBoard.fields(x)(y) == Field(Point(x, y), Some(player), None))
+          assert(newBoard.fields(y)(x) == Field(Point(x, y), Some(player), None))
         else
-          assert(newBoard.fields(x)(y) == Field(Point(x, y), None, None))
+          assert(newBoard.fields(y)(x) == Field(Point(x, y), None, None))
       }
   }
   
@@ -60,7 +60,7 @@ class LogicTest extends FlatSpec {
     val player2dots = Seq(Point(1, 1), Point(1, 2), Point(2, 0), Point(3, 0), Point(3, 1), Point(3, 2))
     
     val board = Board(
-      (for (x <- (0 until 4)) yield (for (y <- (0 until 4)) yield 
+      (for (y <- (0 until 4)) yield (for (x <- (0 until 4)) yield 
           if (player1dots.contains(Point(x, y)))
             Field(Point(x, y), Some(player1), None)
           else if (player2dots.contains(Point(x, y)))
