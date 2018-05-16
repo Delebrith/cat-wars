@@ -43,7 +43,7 @@ object GameView {
     val list = List(playerNameLabel, playerScoreLabel, computerNameLabel, computerScoreLabel)
     for (label <- list){
       label.setTextAlignment(TextAlignment.CENTER)
-      label.setLayoutX(840)
+      label.setLayoutX(830)
       label.setTextFill(Paint.valueOf("DarkOrange"))
       label.setPrefSize(180, 80)
       label.setFont(Font.apply("Arial Black", 24))

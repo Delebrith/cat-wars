@@ -8,6 +8,6 @@ object App extends JFXApp {
     width = 1024
     height = 768
     resizable = false
-    scene = new GameScene(width.value, height.value, new Board(20, 12))
+    scene = new GameScene(width.value, height.value, new Board(15, 9))
   }
 }
