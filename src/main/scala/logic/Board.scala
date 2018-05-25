@@ -21,13 +21,25 @@ case class Board(fields: Vector[Vector[Field]]) {
     fields.length;
   }
   
+  def numberOfPoints(player: Player): Int = {
+    fields.flatten.count(f => f.dot != None && f.dot != Some(player) && f.base == Some(player)) 
+  }
+  
+  def isBoardFull(): Boolean = {
+    fields.flatten.count(f => f.dot == None && f.base == None) == 0
+  }
+  
   def placeDot(
       location: Point,
       player: Player): Board = {
+    
+    if (location.x < 0 || location.y < 0 || location.x >= width() || location.y >= height())
+      throw GameLogicException("Location is out of board")
+    
     val newFields =
       fields.map(_.map((f: Field) =>
         if (f.location == location) 
-          Field(location, Some(player), f.base) 
+          f.placeDot(player) 
         else 
           f))
 
@@ -61,6 +73,107 @@ case class Board(fields: Vector[Vector[Field]]) {
       )
   }
   
+  def connections(): Seq[(Point, Point)] = {
+    
+    def isConnectedToBottomLeft(field: Field): Boolean = {
+      val to = fields(field.location.x - 1)(field.location.y + 1)
+      val left = fields(field.location.x - 1)(field.location.y)
+      val bottom = fields(field.location.x)(field.location.y + 1)
+      
+      to.dot == field.dot && to.base == field.base && 
+        (left.base == field.base && bottom.base != field.base ||
+         left.base != field.base && bottom.base == field.base)
+    }
+    def isConnectedToBottomRight(field: Field): Boolean = {
+      val to = fields(field.location.x + 1)(field.location.y + 1)
+      val right = fields(field.location.x + 1)(field.location.y)
+      val bottom = fields(field.location.x)(field.location.y + 1)
+      
+      to.dot == field.dot && to.base == field.base && 
+        (right.base == field.base && bottom.base != field.base ||
+         right.base != field.base && bottom.base == field.base)
+    }
+    
+    def isConnectedToBottom(field: Field): Boolean = {
+      val to = fields(field.location.x)(field.location.y + 1)
+      
+      val left = field.location.x - 1
+      val right = field.location.x + 1
+      val y = field.location.y
+      val bottom  = field.location.y + 1
+      
+      if (to.dot == field.dot && to.base == field.base) {
+        if (field.location.x == 0 || field.location.x == width() - 1)
+          true
+        else
+          fields(left)(y).base != field.base &&
+          fields(left)(bottom).base != field.base &&
+          fields(right)(y).base == field.base &&
+          fields(right)(bottom).base == field.base ||
+          fields(left)(y).base == field.base &&
+          fields(left)(bottom).base == field.base &&
+          fields(right)(y).base != field.base &&
+          fields(right)(bottom).base != field.base
+      }
+      else
+        false
+    }
+    
+    def isConnectedToRight(field: Field): Boolean = {
+      val to = fields(field.location.x + 1)(field.location.y)
+      
+      val top = field.location.y - 1
+      val bottom = field.location.y + 1
+      val x = field.location.x
+      val right = field.location.x + 1
+      if (to.dot == field.dot && to.base == field.base) {
+        if (field.location.x == 0 || field.location.x == width() - 1)
+          true
+        else
+          fields(x)(top).base != field.base &&
+          fields(right)(top).base != field.base &&
+          fields(x)(bottom).base == field.base &&
+          fields(right)(bottom).base == field.base ||
+          fields(x)(top).base == field.base &&
+          fields(right)(top).base == field.base &&
+          fields(x)(bottom).base != field.base &&
+          fields(right)(bottom).base != field.base
+      }
+      else
+        false
+    }
+    
+    val ret = for (field <- fields.flatten if field.base != None) yield {
+      val x = field.location.x
+      val y = field.location.y
+      
+      val bottomLeft = 
+        if (x - 1 >= 0 && y + 1 < height() && isConnectedToBottomLeft(field))
+          Some(fields(x - 1)(y + 1).location)
+        else
+          None
+      val bottom = 
+        if (y + 1 < height() && isConnectedToBottom(field))
+          Some(fields(x)(y + 1).location)
+        else
+          None
+      val bottomRight =
+        if (x + 1 < width() && y + 1 < height() && isConnectedToBottomRight(field))
+          Some(fields(x + 1)(y + 1).location)
+        else
+          None
+      val right =  
+        if (x + 1 < width() && isConnectedToRight(field))
+          Some(fields(x + 1)(y).location)
+        else
+          None
+          
+      Seq(bottomLeft, bottomRight, bottom, right)
+    }.flatten.map((field.location, _))
+    
+    ret.flatten
+  }
+  
   private def fillFields(
       fields: Vector[Vector[Field]],
       startFrom: Seq[Field],
@@ -87,7 +200,7 @@ case class Board(fields: Vector[Vector[Field]]) {
               if ((x != f.location.x || y != f.location.y) &&
                   (allowThroughCorners || x == f.location.x || y == f.location.y) &&
                   x >= 0 && x < width() &&
-                  y >= 0 && y < width())} yield fields(y)(x);
+                  y >= 0 && y < height())} yield fields(y)(x);
 
                   
         val nextFrom = runFrom
