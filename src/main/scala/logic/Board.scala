@@ -21,6 +21,14 @@ case class Board(fields: Vector[Vector[Field]]) {
     fields.length;
   }
   
+  def numberOfPoints(player: Player): Int = {
+    fields.flatten.count(f => f.dot != None && f.dot != Some(player) && f.base == Some(player)) 
+  }
+  
+  def isBoardFull(): Boolean = {
+    fields.flatten.count(f => f.dot == None && f.base == None) == 0
+  }
+  
   def placeDot(
       location: Point,
       player: Player): Board = {
@@ -192,7 +200,7 @@ case class Board(fields: Vector[Vector[Field]]) {
               if ((x != f.location.x || y != f.location.y) &&
                   (allowThroughCorners || x == f.location.x || y == f.location.y) &&
                   x >= 0 && x < width() &&
-                  y >= 0 && y < width())} yield fields(y)(x);
+                  y >= 0 && y < height())} yield fields(y)(x);
 
                   
         val nextFrom = runFrom
