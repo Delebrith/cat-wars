@@ -40,9 +40,9 @@ class Tile (board: Board, field: Field, size: Double, randomSeed: Int) extends B
   if (field.dot.isDefined) {
     val imageView =
       if (field.dot.contains(Player(PlayerName.COMPUTER.toString)))
-        new ImageView(getEnemySoldierImage())
+        new ImageView(getEnemySoldierImage)
       else
-        new ImageView(getPlayerSoldierImage())
+        new ImageView(getPlayerSoldierImage)
     imageView.smooth_=(true)
     imageView.fitHeight_=(size)
     imageView.fitWidth_=(size)
