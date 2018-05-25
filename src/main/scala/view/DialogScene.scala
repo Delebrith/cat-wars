@@ -41,7 +41,7 @@ class DialogScene(winner: Option[Player]) extends Scene {
           else if (winner.contains(Player(PlayerName.PLAYER.toString)))
             "Congratulations!"
           else
-            "You couldn't beat me!"){
+            "You couldn't win with the enemy!"){
           styleClass_=(List("dialog-label"))
         })
     }

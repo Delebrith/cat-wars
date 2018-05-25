@@ -283,6 +283,6 @@ class LogicTest extends FlatSpec {
     assert(!board.winner().isDefined)
   }
 
-  
+
 
 }
