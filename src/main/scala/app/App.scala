@@ -1,13 +1,15 @@
-import logic.Board
+package app
+
 import scalafx.application.JFXApp
-import ui.{GameScene, StartScene}
+import view.StartStage
 
 object App extends JFXApp {
+  def instance : JFXApp = this
   stage = new JFXApp.PrimaryStage {
     title.value = "Hello Stage"
     width = 1024
     height = 768
     resizable = false
-    scene = new GameScene(width.value, height.value, new Board(15, 9))
+    scene = new StartStage(width.value, height.value)
   }
 }
