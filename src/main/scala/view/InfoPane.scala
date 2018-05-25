@@ -39,7 +39,7 @@ class InfoPane(paneWidth: Double, paneHeight: Double, board: Board) extends Pane
     minWidth_=(0.57 * paneWidth)
     alignment_=(Pos.Center)
     val message =
-      new Label("General!\n Enemies approaching! \nTo win the battle\n surround enemy soldiers\n with ours!")
+      new Label("General!\n The enemies are coming! \nTo win the battle\n surround enemy soldiers\n with ours!")
     styleClass_=(List("message-panel"))
     children = List(message)
   }

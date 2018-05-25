@@ -8,7 +8,7 @@ import scalafx.scene.control.{Alert, Dialog}
 import scalafx.scene.control.Alert.AlertType
 import scalafx.scene.layout.Region
 import scalafx.stage.{Modality, Stage, StageStyle}
-import view.{DialogScene, GameStage, StartStage}
+import view.{DialogScene, GameScene, StartScene}
 
 import scala.util.Random
 
@@ -20,19 +20,19 @@ object Game {
   def placeDot(board: Board, x: Int, y: Int): Unit = {
     val newBoard = board.placeDot(Point(x, y), Player(PlayerName.PLAYER.toString))
     instance.stage.scene =
-      new GameStage(newBoard, instance.stage.width.value, instance.stage.height.value * 0.75, randomSeed)
+      new GameScene(newBoard, instance.stage.width.value, instance.stage.height.value * 0.75, randomSeed)
     //TODO place dot for AI
     if (newBoard.isBoardFull())
       finish(board.winner())
   }
 
   def restart(): Unit = {
-    instance.stage.scene = new StartStage(instance.stage.width.value, instance.stage.height.value)
+    instance.stage.scene = new StartScene(instance.stage.width.value, instance.stage.height.value)
   }
 
   def start(level: Level) {
     this.level = level
-    instance.stage.scene = new GameStage(
+    instance.stage.scene = new GameScene(
       new Board(3, 2), instance.stage.width.value, instance.stage.height.value * 0.75, randomSeed)
   }
 

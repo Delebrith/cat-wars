@@ -14,7 +14,7 @@ import java.util.logging
 
 import scalafx.geometry.Pos
 
-class StartStage(windowWidth: Double, windowHeight: Double) extends Scene {
+class StartScene(windowWidth: Double, windowHeight: Double) extends Scene {
 
   val logger : Logger = Logger.getAnonymousLogger
 

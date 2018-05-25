@@ -1,7 +1,7 @@
 package app
 
 import scalafx.application.JFXApp
-import view.StartStage
+import view.StartScene
 
 object App extends JFXApp {
   def instance : JFXApp = this
@@ -10,6 +10,6 @@ object App extends JFXApp {
     width = 1024
     height = 768
     resizable = false
-    scene = new StartStage(width.value, height.value)
+    scene = new StartScene(width.value, height.value)
   }
 }
