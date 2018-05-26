@@ -214,10 +214,10 @@ class LogicTest extends FlatSpec {
      * . 1 .
      */
     
-    def player1 = Player("1")
-    def player2 = Player("2")
+    val player1 = Player("1")
+    val player2 = Player("2")
     
-    def board = Board(
+    val board = Board(
         Vector(
             Vector(Field(Point(0, 0), Some(player2), None), Field(Point(0, 1), Some(player1), Some(player1)), Field(Point(0, 2), Some(player2), None)),
             Vector(Field(Point(1, 0), Some(player1), Some(player1)), Field(Point(1, 1), None, Some(player1)), Field(Point(1, 2), Some(player1), Some(player1))),
@@ -230,9 +230,9 @@ class LogicTest extends FlatSpec {
   
   "Board that contains other players' dots in base" should "return their total number" in
   {
-    def player1 = Player("1")
-    def player2 = Player("2")
-    def board = new Board(4, 6)
+    val player1 = Player("1")
+    val player2 = Player("2")
+    val board = new Board(4, 6)
           .placeDot(Point(0, 0), player2)
           .placeDot(Point(1, 2), player2)
           
