@@ -37,13 +37,19 @@ object Game {
     
     val afterHuman = placeDot(board, Point(x, y), human)
   
-    instance.stage.scene.value.rootProperty().get().getChildrenUnmodifiable().forEach(_.setDisable(true))
-    new Thread(() => Platform.runLater(
-      {
-        val aiMove = AI(ai, Level.getLevelDepth(level)).getNextMove(afterHuman, human)
-        placeDot(afterHuman, aiMove, ai)
-      }
-      )).start
+    //it's ugly but it works
+    //and for it being ugly javafx & scalafx should be the ones to blame
+    if (!afterHuman.isBoardFull) {
+      instance.stage.scene.value.rootProperty().get()
+        .getChildrenUnmodifiable.get(0).asInstanceOf[javafx.scene.Parent]
+        .getChildrenUnmodifiable.get(0).setDisable(true)
+      new Thread(() => Platform.runLater(
+        {
+          val aiMove = AI(ai, Level.getLevelDepth(level)).getNextMove(afterHuman, human)
+          placeDot(afterHuman, aiMove, ai)
+        }
+        )).start
+    }
   }
 
   def restart(): Unit = {
@@ -53,7 +59,7 @@ object Game {
   def start(level: Level) {
     this.level = level
     instance.stage.scene = new GameScene(
-      new Board(6, 4), instance.stage.width.value, instance.stage.height.value * 0.75, randomSeed)
+      new Board(9, 7), instance.stage.width.value, instance.stage.height.value * 0.75, randomSeed)
   }
 
   def finish(winner: Option[Player]): Unit = {
