@@ -11,4 +11,8 @@ case class Field (location: Point, dot: Option[Player], base: Option[Player]) {
     
     Field(location, Some(player), None)
   }
+  
+  def canPlaceDot: Boolean = {
+    !dot.isDefined && !base.isDefined 
+  }
 }

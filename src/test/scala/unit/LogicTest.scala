@@ -199,7 +199,7 @@ class LogicTest extends FlatSpec {
     
     board.placeDot(Point(1, 2), player)
     
-    assert(!board.isBoardFull())
+    assert(!board.isBoardFull)
   }
   
   "On board that is full it" should "not be possible to place a dot" in {
@@ -225,7 +225,7 @@ class LogicTest extends FlatSpec {
             )
           )
     
-    assert(board.isBoardFull())
+    assert(board.isBoardFull)
   }
   
   "Board that contains other players' dots in base" should "return their total number" in

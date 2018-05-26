@@ -29,7 +29,7 @@ class Tile (board: Board, field: Field, size: Double, randomSeed: Int) extends B
   }
 
   def getEnemySoldierImage : Image = {
-    val path: String = "enemy_soldier_0" + getSoldierIndex(randomSeed) + ".png"
+    val path: String = "computer_soldier_0" + getSoldierIndex(randomSeed) + ".png"
     new Image(path)
   }
 
@@ -61,6 +61,7 @@ class Tile (board: Board, field: Field, size: Double, randomSeed: Int) extends B
   handleEvent(MouseEvent.MouseReleased)  {
     e: MouseEvent => {
       Game.placeDot(board, field.location.x, field.location.y)
+
       logger.log(logging.Level.INFO , "Button clicked: " + field.location.x + " " + field.location.y)
     }
   }

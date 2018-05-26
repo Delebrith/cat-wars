@@ -36,8 +36,12 @@ case class Board(fields: Vector[Vector[Field]]) {
       points(0)._1
   }
   
-  def isBoardFull(): Boolean = {
-    fields.flatten.count(f => f.dot == None && f.base == None) == 0
+  def getEmptyFields: Seq[Field] = {
+    fields.flatten.filter(_.canPlaceDot)
+  }
+  
+  def isBoardFull: Boolean = {
+    getEmptyFields.size == 0
   }
   
   def placeDot(
@@ -66,18 +70,20 @@ case class Board(fields: Vector[Vector[Field]]) {
     
     //get enemy dots that are not in our bases
     val fieldsInBases = newFields
+      .view
       .flatten
       .filter(field => field.dot.getOrElse(player) != player && field.base != Some(player))
       .flatMap(field => fillFields(
           newFields,
           List(field),
           (f: Field) => !fieldsNotInBases.contains(f),
-          true))
+          false))
+      .force;
     
     Board(
       newFields
         .map(_.map(field => 
-          if (fieldsInBases.contains(field))
+          if (fieldsInBases.toIndexedSeq.contains(field))
             Field(field.location, field.dot, Some(player)) 
           else
             field))

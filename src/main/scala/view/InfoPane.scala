@@ -1,6 +1,6 @@
 package view
 
-import logic.Board
+import logic.{Board, Player}
 import scalafx.geometry.Pos
 import scalafx.scene.control.Label
 import scalafx.scene.image.{Image, ImageView}
@@ -24,11 +24,11 @@ class InfoPane(paneWidth: Double, paneHeight: Double, board: Board) extends Pane
     vgrow_=(Priority.Always)
     alignmentInParent_=(Pos.BottomRight)
 
-    val playerName : Label = new Label("PLAYER")
-    val playerScore : Label = new Label("1234")
+    val playerName : Label = new Label(PlayerName.PLAYER.toString)
+    val playerScore : Label = new Label(board.numberOfPoints(Player(PlayerName.PLAYER.toString)).toString)
 
-    val computerName : Label = new Label("COMPUTER")
-    val computerScore : Label = new Label("4321")
+    val computerName : Label = new Label(PlayerName.COMPUTER.toString)
+    val computerScore : Label = new Label(board.numberOfPoints(Player(PlayerName.COMPUTER.toString)).toString)
 
     alignment_=(Pos.Center)
     styleClass_=(List("score-panel"))

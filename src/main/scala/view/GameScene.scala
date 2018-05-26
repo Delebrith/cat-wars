@@ -12,4 +12,8 @@ class GameScene(board: Board, windowWidth: Double, windowHeight: Double, randomS
       children = List(new BoardPane(windowWidth, 0.80 * windowHeight, board, randomSeed),
       new InfoPane(windowWidth, 0.20 * windowHeight, board))
     }
+    
+    def disable = {
+      content.forEach(_.setDisable(true))
+    }
 }
