@@ -35,8 +35,8 @@ object Game {
     
     val afterHuman = placeDot(board, Point(x, y), human)
     
-    val aiMove = AI(ai, Level.getLevelDepth(level)).getNextMove(board, human)
-    placeDot(board, aiMove, ai)
+    val aiMove = AI(ai, Level.getLevelDepth(level)).getNextMove(afterHuman, human)
+    placeDot(afterHuman, aiMove, ai)
   }
 
   def restart(): Unit = {
@@ -46,7 +46,7 @@ object Game {
   def start(level: Level) {
     this.level = level
     instance.stage.scene = new GameScene(
-      new Board(3, 2), instance.stage.width.value, instance.stage.height.value * 0.75, randomSeed)
+      new Board(4, 3), instance.stage.width.value, instance.stage.height.value * 0.75, randomSeed)
   }
 
   def finish(winner: Option[Player]): Unit = {

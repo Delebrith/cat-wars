@@ -11,7 +11,7 @@ case class AI(player: Player, predictionDepth: Int) {
   
   private def minmax(board: Board, depth: Int, currentPlayer : Player, enemy: Player): Int = {
     if (depth == predictionDepth || board.isBoardFull)
-      board.numberOfPoints(player) - board.numberOfPoints(enemy)
+      return board.numberOfPoints(player) - board.numberOfPoints(enemy)
       
     val possibleMoves = board.getEmptyFields
     

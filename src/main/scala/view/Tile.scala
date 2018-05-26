@@ -29,7 +29,7 @@ class Tile (board: Board, field: Field, size: Double, randomSeed: Int) extends B
   }
 
   def getEnemySoldierImage : Image = {
-    val path: String = "enemy_soldier_0" + getSoldierIndex(randomSeed) + ".png"
+    val path: String = "computer_soldier_0" + getSoldierIndex(randomSeed) + ".png"
     new Image(path)
   }
 

@@ -12,8 +12,6 @@ import scalafx.scene.input.MouseEvent
 import scalafx.scene.layout._
 import scalafx.Includes._
 import scalafx.geometry.Pos
-import scalafx.scene
-import scalafx.stage.{Stage, Window}
 
 class DialogScene(winner: Option[Player]) extends Scene {
 
@@ -72,8 +70,8 @@ class DialogScene(winner: Option[Player]) extends Scene {
         }
       )
     }
-    alignmentInParent_=(Pos.Center)
-    alignment_=(Pos.Center)
+    alignmentInParent_=(Pos.BottomCenter)
+    alignment_=(Pos.BottomCenter)
     hgrow_=(Priority.Always)
     vgrow_=(Priority.Always)
     children = List(upperBox, lowerBox)
