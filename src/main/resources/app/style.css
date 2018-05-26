@@ -16,19 +16,35 @@
 
 .message-panel {
     -fx-font-family: 'Arcade Alternate';
-    -fx-background-color: #335599;
     -fx-font-size: 32px;
-    -fx-border-color: #0077DD;
     -fx-border-width: 5;
 }
 
-.score-panel {
+.message-panel-own {
     -fx-background-color: #335599;
     -fx-border-color: #0077DD;
+}
+
+.message-panel-enemy {
+    -fx-background-color: #772200;
+    -fx-border-color: #FF3300;
+}
+
+.score-panel {
     -fx-font-size: 28px;
     -fx-padding: 20;
     -fx-border-width: 5;
     -fx-alignment: center;
+}
+
+.score-panel-own {
+    -fx-background-color: #335599;
+    -fx-border-color: #0077DD;
+}
+
+.score-panel-enemy {
+    -fx-background-color: #772200;
+    -fx-border-color: #FF3300;
 }
 
 .menu-button {

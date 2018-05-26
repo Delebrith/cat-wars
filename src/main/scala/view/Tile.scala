@@ -60,8 +60,11 @@ class Tile (board: Board, field: Field, size: Double, randomSeed: Int) extends B
 
   handleEvent(MouseEvent.MouseReleased)  {
     e: MouseEvent => {
-      Game.placeDot(board, field.location.x, field.location.y)
-
+      try {
+        Game.placeDot(board, field.location.x, field.location.y)
+      } catch {
+        case e: logic.GameLogicException => (new ExceptionStage(e)).showAndWait()
+      }
       logger.log(logging.Level.INFO , "Button clicked: " + field.location.x + " " + field.location.y)
     }
   }

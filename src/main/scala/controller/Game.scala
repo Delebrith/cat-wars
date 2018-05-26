@@ -19,11 +19,15 @@ object Game {
   private var level = Level.EASY
   private val randomSeed = Random.nextInt()
 
-  def placeDot(board: Board, location: Point, player: Player): Board = {
+  def placeDot(board: Board, location: Point, player: Player, enemy: Player): Board = {
     val newBoard = board.placeDot(location, player)
 
     instance.stage.scene =
-      new GameScene(newBoard, instance.stage.width.value, instance.stage.height.value * 0.75, randomSeed)
+      new GameScene(newBoard, instance.stage.width.value, instance.stage.height.value * 0.75, randomSeed,
+        if (!newBoard.isBoardFull)
+          enemy
+        else
+          newBoard.winner().getOrElse(player))
 
     if (newBoard.isBoardFull)
       finish(board.winner())
@@ -35,15 +39,21 @@ object Game {
     val ai = Player(PlayerName.COMPUTER.toString)
     val human = Player(PlayerName.PLAYER.toString)
     
-    val afterHuman = placeDot(board, Point(x, y), human)
+    val afterHuman = placeDot(board, Point(x, y), human, ai)
   
-    instance.stage.scene.value.rootProperty().get().getChildrenUnmodifiable().forEach(_.setDisable(true))
-    new Thread(() => Platform.runLater(
-      {
-        val aiMove = AI(ai, Level.getLevelDepth(level)).getNextMove(afterHuman, human)
-        placeDot(afterHuman, aiMove, ai)
-      }
-      )).start
+    //it's ugly but it works
+    //and for it being ugly javafx & scalafx should be the ones to blame
+    if (!afterHuman.isBoardFull) {
+      instance.stage.scene.value.rootProperty().get()
+        .getChildrenUnmodifiable.get(0).asInstanceOf[javafx.scene.Parent]
+        .getChildrenUnmodifiable.get(0).setDisable(true)
+      new Thread(() => Platform.runLater(
+        {
+          val aiMove = AI(ai, Level.getLevelDepth(level)).getNextMove(afterHuman, human)
+          placeDot(afterHuman, aiMove, ai, human)
+        }
+        )).start
+    }
   }
 
   def restart(): Unit = {
@@ -52,8 +62,9 @@ object Game {
 
   def start(level: Level) {
     this.level = level
+    val player = Player(PlayerName.PLAYER.toString)
     instance.stage.scene = new GameScene(
-      new Board(6, 4), instance.stage.width.value, instance.stage.height.value * 0.75, randomSeed)
+      new Board(9, 7), instance.stage.width.value, instance.stage.height.value * 0.75, randomSeed, player)
   }
 
   def finish(winner: Option[Player]): Unit = {

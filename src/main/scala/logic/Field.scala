@@ -4,10 +4,10 @@ case class Field (location: Point, dot: Option[Player], base: Option[Player]) {
   def placeDot(player: Player): Field = {
     
     if (dot != None)
-      throw GameLogicException("Cannot place dot on an existing one")
+      throw GameLogicException("Sir! We can`t place our cat on another one!")
     
     if (base != None)
-      throw GameLogicException("Cannot place dot inside of a base")
+      throw GameLogicException("Sir! This fields is already taken!")
     
     Field(location, Some(player), None)
   }

@@ -6,16 +6,23 @@ import scalafx.scene.control.Label
 import scalafx.scene.image.{Image, ImageView}
 import scalafx.scene.layout._
 
-class InfoPane(paneWidth: Double, paneHeight: Double, board: Board) extends Pane {
+class InfoPane(paneWidth: Double, paneHeight: Double, board: Board, player: Player) extends Pane {
 
   val officerImage : VBox = new VBox {
     val imageView = new ImageView {
-      image = new Image("officer_cat.png")
+      image = new Image(
+        if (player.name == PlayerName.PLAYER.toString)
+          "officer_cat.png"
+        else
+          "enemy_cat.png")
       fitHeight_=(paneHeight * 2)
       preserveRatio_=(true)
       alignmentInParent_=(Pos.BottomLeft)
     }
-    styleClass_=(List("message-panel"))
+    styleClass_=(List("message-panel", if (player.name == PlayerName.PLAYER.toString)
+      "message-panel-own"
+    else
+      "message-panel-enemy"))
     children_=(List(imageView))
   }
 
@@ -31,7 +38,10 @@ class InfoPane(paneWidth: Double, paneHeight: Double, board: Board) extends Pane
     val computerScore : Label = new Label(board.numberOfPoints(Player(PlayerName.COMPUTER.toString)).toString)
 
     alignment_=(Pos.Center)
-    styleClass_=(List("score-panel"))
+    styleClass_=(List("score-panel", if (player.name == PlayerName.PLAYER.toString)
+      "score-panel-own"
+    else
+      "score-panel-enemy"))
     children =  List(playerName, playerScore, computerName, computerScore)
   }
 
@@ -40,7 +50,10 @@ class InfoPane(paneWidth: Double, paneHeight: Double, board: Board) extends Pane
     alignment_=(Pos.Center)
     val message =
       new Label("General!\n The enemies are coming! \nTo win the battle\n surround enemy soldiers\n with ours!")
-    styleClass_=(List("message-panel"))
+    styleClass_=(List("message-panel", if (player.name == PlayerName.PLAYER.toString)
+      "message-panel-own"
+    else
+      "message-panel-enemy"))
     children = List(message)
   }
 
