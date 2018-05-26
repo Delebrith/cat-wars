@@ -36,8 +36,12 @@ case class Board(fields: Vector[Vector[Field]]) {
       points(0)._1
   }
   
-  def isBoardFull(): Boolean = {
-    fields.flatten.count(f => f.dot == None && f.base == None) == 0
+  def getEmptyFields: Seq[Field] = {
+    fields.flatten.filter(_.canPlaceDot)
+  }
+  
+  def isBoardFull: Boolean = {
+    getEmptyFields.size == 0
   }
   
   def placeDot(

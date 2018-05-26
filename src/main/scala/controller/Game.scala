@@ -11,19 +11,32 @@ import scalafx.stage.{Modality, Stage, StageStyle}
 import view.{DialogScene, GameScene, StartScene}
 
 import scala.util.Random
+import logic.AI
 
 object Game {
 
   private var level = Level.EASY
   private val randomSeed = Random.nextInt()
 
-  def placeDot(board: Board, x: Int, y: Int): Unit = {
-    val newBoard = board.placeDot(Point(x, y), Player(PlayerName.PLAYER.toString))
+  def placeDot(board: Board, location: Point, player: Player): Board = {
+    val newBoard = board.placeDot(location, player)
     instance.stage.scene =
       new GameScene(newBoard, instance.stage.width.value, instance.stage.height.value * 0.75, randomSeed)
-    //TODO place dot for AI
-    if (newBoard.isBoardFull())
+    
+    if (newBoard.isBoardFull)
       finish(board.winner())
+    
+    newBoard
+  }
+  
+  def placeDot(board: Board, x: Int, y: Int): Unit = {
+    val ai = Player(PlayerName.COMPUTER.toString)
+    val human = Player(PlayerName.PLAYER.toString)
+    
+    val afterHuman = placeDot(board, Point(x, y), human)
+    
+    val aiMove = AI(ai, Level.getLevelDepth(level)).getNextMove(board, human)
+    placeDot(board, aiMove, ai)
   }
 
   def restart(): Unit = {
