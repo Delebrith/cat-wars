@@ -7,8 +7,8 @@ case class Board(fields: Vector[Vector[Field]]) {
    * additional constructor that creates empty game board
    */
   def this(width: Int, height: Int) = this (
-    (for (y <- (0 until height)) yield
-      (for (x <- (0 until width)) yield
+    (for (y <- 0 until height) yield
+      (for (x <- 0 until width) yield
         Field(Point(x, y), None, None)
       ).toVector
     ).toVector
@@ -23,6 +23,17 @@ case class Board(fields: Vector[Vector[Field]]) {
   
   def numberOfPoints(player: Player): Int = {
     fields.flatten.count(f => f.dot != None && f.dot != Some(player) && f.base == Some(player)) 
+  }
+
+  def winner(): Option[Player] = {
+    val points = fields.flatten.filter(f => f.dot != None && f.base != None && f.dot != f.base)
+      .groupBy(_.base).mapValues(_.size).toList.sortWith(_._2 > _._2)
+    if (points.size == 1)
+      points(0)._1
+    else if (points.isEmpty || points(0)._2 == points(1)._2)
+      None
+    else
+      points(0)._1
   }
   
   def isBoardFull(): Boolean = {
