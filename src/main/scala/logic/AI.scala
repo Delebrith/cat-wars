@@ -19,7 +19,7 @@ case class AI(player: Player, predictionDepth: Int) {
     
     if (currentPlayer == player) {
           
-      if (beta >= alpha)
+      if (beta < alpha)
         return Int.MaxValue
         
       val potentialNewAlpha = possibleMoves
@@ -30,7 +30,7 @@ case class AI(player: Player, predictionDepth: Int) {
       newAlpha
     }
     else {
-      if (beta >= alpha)
+      if (beta < alpha)
         return Int.MinValue
       
       val potentialNewBeta = possibleMoves

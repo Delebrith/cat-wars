@@ -6,9 +6,9 @@ object Level extends Enumeration {
   
   def getLevelDepth(value: Value) : Int = {
     value match {
-      case EASY => 6
-      case MEDIUM => 8
-      case HARD => 10
+      case EASY => 3
+      case MEDIUM => 4
+      case HARD => 5
       case _ => 0
     }
   }

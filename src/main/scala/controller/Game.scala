@@ -12,6 +12,7 @@ import view.{DialogScene, GameScene, StartScene}
 
 import scala.util.Random
 import logic.AI
+import scalafx.application.Platform
 
 object Game {
 
@@ -20,9 +21,10 @@ object Game {
 
   def placeDot(board: Board, location: Point, player: Player): Board = {
     val newBoard = board.placeDot(location, player)
-    instance.stage.scene =
+
+   instance.stage.scene =
       new GameScene(newBoard, instance.stage.width.value, instance.stage.height.value * 0.75, randomSeed)
-    
+
     if (newBoard.isBoardFull)
       finish(board.winner())
     
@@ -46,7 +48,7 @@ object Game {
   def start(level: Level) {
     this.level = level
     instance.stage.scene = new GameScene(
-      new Board(12, 8), instance.stage.width.value, instance.stage.height.value * 0.75, randomSeed)
+      new Board(6, 4), instance.stage.width.value, instance.stage.height.value * 0.75, randomSeed)
   }
 
   def finish(winner: Option[Player]): Unit = {

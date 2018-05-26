@@ -35,7 +35,7 @@ class DialogScene(winner: Option[Player]) extends Scene {
         },
         new Label(
           if (winner.contains(Player(PlayerName.COMPUTER.toString)))
-            "LOOSER!"
+            "YOU LOOSER!"
           else if (winner.contains(Player(PlayerName.PLAYER.toString)))
             "Congratulations!"
           else
