@@ -1,0 +1,64 @@
+@font-face {
+    src: url("ArcadeAlternate.ttf");
+}
+
+.board-pane {
+    -fx-background-image: url("battle-background.png");
+    -fx-background-size: stretch;
+}
+
+.label {
+    -fx-font-family: 'Arcade Alternate';
+    -fx-text-fill: #55FFFF;
+    -fx-text-alignment: center;
+    -fx-padding: 0;
+}
+
+.message-panel {
+    -fx-font-family: 'Arcade Alternate';
+    -fx-background-color: #335599;
+    -fx-font-size: 32px;
+    -fx-border-color: #0077DD;
+    -fx-border-width: 5;
+}
+
+.score-panel {
+    -fx-background-color: #335599;
+    -fx-border-color: #0077DD;
+    -fx-font-size: 28px;
+    -fx-padding: 20;
+    -fx-border-width: 5;
+    -fx-alignment: center;
+}
+
+.menu-button {
+    -fx-font-family: 'Arcade Alternate';
+    -fx-font-size: 28px;
+    -fx-text-fill: #CC7700;
+    -fx-text-alignment: center;
+    -fx-border-width: 5;
+    -fx-border-color: #DD7700;
+    -fx-background-color: #DDFFAA;
+    -fx-padding: 10;
+}
+
+.start-stage {
+    -fx-background-image: url("start-background.png");
+    -fx-background-size: stretch;
+}
+
+.dialog-label {
+    -fx-font-family: 'Arcade Alternate';
+    -fx-text-fill: #552222;
+    -fx-text-alignment: center;
+    -fx-padding: 20;
+    -fx-alignment: center;
+}
+
+.dialog {
+    -fx-font-family: 'Arcade Alternate';
+    -fx-font-size: 28px;
+    -fx-text-alignment: center;
+    -fx-background-color: #FFFFAA;
+    -fx-padding: 20;
+}
