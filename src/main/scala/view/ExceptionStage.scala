@@ -3,9 +3,7 @@ package view
 import scalafx.stage.Stage
 import logic.GameLogicException
 import app.App
-import controller.Game
 import javafx.stage
-import logic.Player
 import scalafx.scene.Scene
 import scalafx.scene.control.{Button, Label}
 import scalafx.scene.input.MouseEvent
@@ -24,7 +22,6 @@ class ExceptionStage(exception : GameLogicException) extends Stage {
     content_=(new VBox{
       styleClass_=(List("dialog"))
       alignmentInParent_=(Pos.Center)
-      
       alignment_=(Pos.BottomCenter)
       hgrow_=(Priority.Always)
       vgrow_=(Priority.Always)

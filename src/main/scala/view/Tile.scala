@@ -6,29 +6,27 @@ import java.util.logging.Logger
 import controller.Game
 import scalafx.Includes._
 import logic.{Board, Field, Player}
-import scalafx.geometry.{Insets, Pos}
+import scalafx.geometry.Insets
 import scalafx.scene.control.Button
 import scalafx.scene.image.{Image, ImageView}
 import scalafx.scene.input.MouseEvent
 
-import scala.util.Random
-
 class Tile (board: Board, field: Field, size: Double, randomSeed: Int) extends Button {
 
-  val logger : Logger = Logger.getAnonymousLogger
+  private val logger : Logger = Logger.getAnonymousLogger
 
-  def getSoldierIndex(randomSeed: Int) : Int = {
+  private def getSoldierIndex(randomSeed: Int) : Int = {
     val x = field.location.x
     val y = field.location.y
     (((x + 141) * 1141 % (y + 17)) ^ randomSeed).abs % 4 + 1
   }
 
-  def getPlayerSoldierImage : Image = {
+  private def getPlayerSoldierImage : Image = {
     val path: String = "player_soldier_0" + getSoldierIndex(randomSeed) + ".png"
     new Image(path)
   }
 
-  def getEnemySoldierImage : Image = {
+  private def getEnemySoldierImage : Image = {
     val path: String = "computer_soldier_0" + getSoldierIndex(randomSeed) + ".png"
     new Image(path)
   }
@@ -50,9 +48,9 @@ class Tile (board: Board, field: Field, size: Double, randomSeed: Int) extends B
   }
 
 
-  if (field.base == Some(Player(PlayerName.COMPUTER.toString))) {
+  if (field.base.contains(Player(PlayerName.COMPUTER.toString))) {
     style_=("-fx-background-color: #FFBBBB")
-  } else  if (field.base == Some(Player(PlayerName.PLAYER.toString))) {
+  } else  if (field.base.contains(Player(PlayerName.PLAYER.toString))) {
     style_=("-fx-background-color: #BBBBFF")
   } else {
     style_=("-fx-background-color: #BBFFBB")
@@ -63,7 +61,7 @@ class Tile (board: Board, field: Field, size: Double, randomSeed: Int) extends B
       try {
         Game.placeDot(board, field.location.x, field.location.y)
       } catch {
-        case e: logic.GameLogicException => (new ExceptionStage(e)).showAndWait()
+        case e: logic.GameLogicException => new ExceptionStage(e).showAndWait()
       }
       logger.log(logging.Level.INFO , "Button clicked: " + field.location.x + " " + field.location.y)
     }
