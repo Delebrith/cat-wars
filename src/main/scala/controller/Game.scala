@@ -46,7 +46,7 @@ object Game {
   def start(level: Level) {
     this.level = level
     instance.stage.scene = new GameScene(
-      new Board(4, 3), instance.stage.width.value, instance.stage.height.value * 0.75, randomSeed)
+      new Board(12, 8), instance.stage.width.value, instance.stage.height.value * 0.75, randomSeed)
   }
 
   def finish(winner: Option[Player]): Unit = {
