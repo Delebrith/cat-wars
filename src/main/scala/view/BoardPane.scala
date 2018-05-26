@@ -1,8 +1,8 @@
 package view
 
 import logic.Board
-import scalafx.geometry.{Insets, Pos}
-import scalafx.scene.layout.{Background, BackgroundFill, CornerRadii, Pane}
+import scalafx.geometry.Pos
+import scalafx.scene.layout.Pane
 
 class BoardPane(paneWidth: Double, paneHeight: Double, board: Board, randomSeed: Int) extends Pane {
 

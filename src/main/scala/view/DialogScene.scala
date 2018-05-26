@@ -1,7 +1,5 @@
 package view
 
-import java.util.logging
-
 import app.App
 import controller.Game
 import javafx.stage
@@ -20,7 +18,7 @@ class DialogScene(winner: Option[Player]) extends Scene {
   content = new VBox {
     styleClass_=(List("dialog"))
     alignmentInParent_=(Pos.Center)
-    val upperBox = new VBox {
+    private val upperBox = new VBox {
       alignmentInParent_=(Pos.Center)
       alignment_=(Pos.Center)
       hgrow_=(Priority.Always)
@@ -43,7 +41,7 @@ class DialogScene(winner: Option[Player]) extends Scene {
           styleClass_=(List("dialog-label"))
         })
     }
-    val lowerBox = new HBox {
+    private val lowerBox = new HBox {
       spacing_=(10)
       alignmentInParent_=(Pos.Center)
       alignment_=(Pos.Center)

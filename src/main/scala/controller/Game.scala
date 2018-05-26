@@ -52,7 +52,7 @@ object Game {
           val aiMove = AI(ai, Level.getLevelDepth(level)).getNextMove(afterHuman, human)
           placeDot(afterHuman, aiMove, ai, human)
         }
-        )).start
+        )).start()
     }
   }
 
@@ -68,11 +68,6 @@ object Game {
   }
 
   def finish(winner: Option[Player]): Unit = {
-
-    val opaqueLayer = new Region {
-      style_=("-fx-background-color: #00000044;")
-      visible_=(false)
-    }
 
     val dialog : Stage = new Stage{
       scene_=(new DialogScene(winner))
