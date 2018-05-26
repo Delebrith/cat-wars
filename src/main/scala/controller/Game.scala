@@ -22,7 +22,7 @@ object Game {
   def placeDot(board: Board, location: Point, player: Player): Board = {
     val newBoard = board.placeDot(location, player)
 
-   instance.stage.scene =
+    instance.stage.scene =
       new GameScene(newBoard, instance.stage.width.value, instance.stage.height.value * 0.75, randomSeed)
 
     if (newBoard.isBoardFull)
@@ -36,9 +36,14 @@ object Game {
     val human = Player(PlayerName.PLAYER.toString)
     
     val afterHuman = placeDot(board, Point(x, y), human)
-    
-    val aiMove = AI(ai, Level.getLevelDepth(level)).getNextMove(afterHuman, human)
-    placeDot(afterHuman, aiMove, ai)
+  
+    instance.stage.scene.value.rootProperty().get().getChildrenUnmodifiable().forEach(_.setDisable(true))
+    new Thread(() => Platform.runLater(
+      {
+        val aiMove = AI(ai, Level.getLevelDepth(level)).getNextMove(afterHuman, human)
+        placeDot(afterHuman, aiMove, ai)
+      }
+      )).start
   }
 
   def restart(): Unit = {
