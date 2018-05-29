@@ -1,6 +1,5 @@
 package view
 
-import java.util.logging
 import java.util.logging.Logger
 
 import controller.Game
@@ -11,21 +10,43 @@ import scalafx.scene.control.Button
 import scalafx.scene.image.{Image, ImageView}
 import scalafx.scene.input.MouseEvent
 
+/**
+  * Graphic representation of logic.field
+  *
+  * @param board structure of fields with current state of the game
+  * @param field field of the board to represent by Tile
+  * @param size size of the tile in pixels
+  * @param randomSeed random number used for random placement of images in the tiles of the board
+  */
 class Tile (board: Board, field: Field, size: Double, randomSeed: Int) extends Button {
 
-  private val logger : Logger = Logger.getAnonymousLogger
-
+  /**
+    * Finds the index of the picture to place on the tile. The index is generated with
+    * the randomSeed
+    * @param randomSeed
+    * @return index of the picture
+    */
   private def getSoldierIndex(randomSeed: Int) : Int = {
     val x = field.location.x
     val y = field.location.y
     (((x + 141) * 1141 % (y + 17)) ^ randomSeed).abs % 4 + 1
   }
 
+  /**
+    * Prepare an image to display on Player's tiles. Image is chosen from resources
+    * with getSoldierImage method
+    * @return Image of player's soldier
+    */
   private def getPlayerSoldierImage : Image = {
     val path: String = "player_soldier_0" + getSoldierIndex(randomSeed) + ".png"
     new Image(path)
   }
 
+  /**
+    * Prepare an image to display on computer's tiles. Image is chosen from resources
+    * with getSoldierImage method
+    * @return Image of computer's soldier
+    */
   private def getEnemySoldierImage : Image = {
     val path: String = "computer_soldier_0" + getSoldierIndex(randomSeed) + ".png"
     new Image(path)
@@ -63,7 +84,6 @@ class Tile (board: Board, field: Field, size: Double, randomSeed: Int) extends B
       } catch {
         case e: logic.GameLogicException => new ExceptionStage(e).showAndWait()
       }
-      logger.log(logging.Level.INFO , "Button clicked: " + field.location.x + " " + field.location.y)
     }
   }
 }
