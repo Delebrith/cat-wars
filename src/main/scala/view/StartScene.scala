@@ -1,7 +1,5 @@
 package view
 
-import java.util.logging.Logger
-
 import controller.Game
 import logic.Level
 import scalafx.scene.Scene
@@ -12,10 +10,23 @@ import scalafx.Includes._
 
 import scalafx.geometry.Pos
 
+/**
+  * Start scene of the game with menu. here players chooses the level of difficulity
+  *
+  * @param windowWidth width in pixels
+  * @param windowHeight height in pixels
+  */
 class StartScene(windowWidth: Double, windowHeight: Double) extends Scene {
 
-  private val logger : Logger = Logger.getAnonymousLogger
-
+  /**
+    * Method generating button of given width, height and text in it. Style of the button
+    * is defined in class menu-button in css file.
+    *
+    * @param buttonWidth width in pixels
+    * @param buttonHeight height in pixles
+    * @param text string to place on the button
+    * @return styled Button with given properties
+    */
   private def createButton(buttonWidth: Double, buttonHeight: Double, text: String) : Button = {
     val button : Button = new Button(text)
     button.setPrefSize(buttonWidth, buttonHeight)
@@ -33,7 +44,6 @@ class StartScene(windowWidth: Double, windowHeight: Double) extends Scene {
       button.handleEvent(MouseEvent.MouseReleased)  {
         e: MouseEvent => {
           Game.start(level)
-          logger.info( "Starting game. Level: " + level.toString)
         }
       }
       button
