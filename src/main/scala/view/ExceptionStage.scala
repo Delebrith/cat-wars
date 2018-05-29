@@ -14,6 +14,13 @@ import scalafx.stage.Modality
 import scalafx.stage.StageStyle
 
 
+/**
+  * Class for window that is supposed to contain a simple and short message for player about a single exception and OK button that closes it
+  * 
+  * @constructor creates window with the message of given exception
+  * 
+  * @param exception The exception that's message will be displayed
+  */
 class ExceptionStage(exception : GameLogicException) extends Stage {
   scene_=(new Scene {
     
