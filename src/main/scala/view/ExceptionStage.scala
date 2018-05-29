@@ -13,7 +13,11 @@ import scalafx.geometry.Pos
 import scalafx.stage.Modality
 import scalafx.stage.StageStyle
 
-
+/**
+  * Dialog displayed after player's attempt to violate rules of the game
+  *
+  * @param exception Exception carrying message with explanation of which rule was violated
+  */
 class ExceptionStage(exception : GameLogicException) extends Stage {
   scene_=(new Scene {
     
